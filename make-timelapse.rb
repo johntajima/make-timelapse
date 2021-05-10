@@ -18,7 +18,7 @@ require 'optionparser'
 
 options = {}
 options[:quality]   = 17
-options[:framerate] = 24
+options[:framerate] = 30
 options[:size]      = '3280x2464' # pi camera v2 max size
 options[:encoding]  = 'libx264'
 options[:force]     = false

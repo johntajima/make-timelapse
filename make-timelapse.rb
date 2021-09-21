@@ -20,16 +20,22 @@ options = {}
 options[:quality]   = 17
 options[:framerate] = 30
 options[:size]      = '3280x2464' # pi camera v2 max size
+#options[:size]      = '1440x1080' # pi camera v2 max size
 options[:encoding]  = 'libx264'
 options[:force]     = false
+options[:path]      = ''
 
 root_path = ARGV.first
 path      = File.expand_path(root_path)
 
 def make_timelapse(path, options = {})
-  infile = "-pattern_type glob -i '#{File.join(path, "*.jpg")}'"
+  if options[:input]
+    infile = "-f concat -i #{options[:input]}"
+  else
+    infile = "-pattern_type glob -i '#{File.join(path, "*.jpg")}'"
+  end
   outfile = options[:outfile] ? options[:outfile] :   set_outfile(path)
-  cmd = "ffmpeg -framerate #{options[:framerate]} #{infile} -s:v #{options[:size]} -c:v #{options[:encoding]} -crf #{options[:quality]} -pix_fmt yuv420p #{outfile}"
+  cmd = "ffmpeg -framerate #{options[:framerate]} #{infile} -s:v #{options[:size]} -c:v #{options[:encoding]} -crf #{options[:quality]} -pix_fmt yuv420p '#{outfile}'"
   system(cmd)
 end
 
@@ -60,6 +66,13 @@ OptionParser.new do |opts|
   end
   opts.on('-o', '--outfile FILE', "output filename (default YYYMMDD.mp4)") do |filename|
     options[:outfile] = File.expand_path(filename)
+  end
+  opts.on('-i', '--input-paths INPUT', "comma-separated list of paths of input files") do |input|
+    paths = input.split(",")
+    file = paths.map do |path|
+      cmd = File.join(File.expand_path(path), "*.jpg")
+      "file #{cmd}"
+    end.join("\n")
   end
 end.parse!
 

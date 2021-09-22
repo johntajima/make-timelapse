@@ -3,16 +3,17 @@ require 'date';
 # generate timelapse of day before's snapshots
 
 YESTERDAY = Date.today - 1;
-ROOT_PATH = ENV['TIMELAPSE_PATH'] || "/volume2/Data/pi3";
 SIZE      = '3280x2464'; #'1440x1080'; # '3280x2464';
 FRAMERATE = 30
 
+path = ARGV.first || ENV['TIMELAPSE_PATH'] || "/volume2/Data/pi3";
+
 # input 
-INPUT_PATH = File.join(ROOT_PATH, YESTERDAY.year.to_s, "%02d" % YESTERDAY.month, "%02d" % YESTERDAY.day)
+INPUT_PATH = File.join(path, YESTERDAY.year.to_s, "%02d" % YESTERDAY.month, "%02d" % YESTERDAY.day)
 
 # output file
 fn = [YESTERDAY.year.to_s, "%02d" % YESTERDAY.month, "%02d" % YESTERDAY.day].join("-")
-OUTFILE = File.join(ROOT_PATH, "#{fn}.mp4");
+OUTFILE = File.join(path, "#{fn}.mp4");
 
 def timelapse(path, output)
   infiles = "-pattern_type glob -i '#{File.join(path, "*.jpg")}'"

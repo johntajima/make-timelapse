@@ -17,7 +17,7 @@ OUTFILE = File.join(path, "#{fn}.mp4");
 
 def timelapse(path, output)
   infiles = "-pattern_type glob -i '#{File.join(path, "*.jpg")}'"
-  cmd = "ffmpeg -y -framerate #{FRAMERATE} #{infiles} -s:v #{SIZE} -c:v libx264 -crf 17 -pix_fmt yuv420p '#{output}'"
+  cmd = "~/bin/ffmpeg -y -framerate #{FRAMERATE} #{infiles} -s:v #{SIZE} -c:v libx264 -crf 17 -pix_fmt yuv420p '#{output}'"
   system(cmd)
 end
 
